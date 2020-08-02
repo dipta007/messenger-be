@@ -5,30 +5,11 @@ import { Model, isValidObjectId } from 'mongoose';
 
 @Injectable()
 export class MessageService {
-  constructor(@Inject('ROOM_MODEL') private roomModel: Model<Room>,
+  constructor(@Inject('MESSAGE_MODEL') private messageModel: Model<Room>,
               @Inject('USER_MODEL') private userModel: Model<User>) {}
 
-  async addUserToRoom(roomId: string, username: string) {
-    const existingRoom = isValidObjectId(roomId) && await this.roomModel.findById(roomId)
-    const user = await this.userModel.findOne({ username: username });
-
-    let users = [];
-    if (existingRoom) {
-      users = existingRoom.users
-      users = [...users, user._id];
-      users = [...new Set(users)]
-
-      await existingRoom.updateOne({ name: username, users });
-      return existingRoom._id;
-    } else {
-      console.log('user', roomId, users)
-      const ret = await (await this.roomModel.create({ name: username, users: [user._id] })).save();
-      return ret._id;
-    }
-    
-  }
-
-  async getRoom(roomId: string) {
-    return await this.roomModel.findOne({ _id: roomId })
+  async addMessage(username: string, roomId: string, msg: string) {
+    const user = await this.userModel.findOne({ username });
+    return await (await this.messageModel.create({ sender: user._id, message: msg, roomId })).save();
   }
 }

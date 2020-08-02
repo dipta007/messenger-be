@@ -1,16 +1,15 @@
 import { Module } from '@nestjs/common';
-import { catsProviders } from './cats.provider';
+import { messageProviders } from './message.provider';
 import { DatabaseModule } from '../database.module';
-import { Cat } from './cat.interface';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [],
   providers: [
-    ...catsProviders,
+    ...messageProviders,
   ],
   exports: [
-    ...catsProviders,
+    ...messageProviders,
   ],
 })
-export class CatModule {}
+export class MessageModule {}

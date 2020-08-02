@@ -8,12 +8,13 @@ import {
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 import { RoomService } from './room.service';
+import { MessageService } from './message.service';
 
 @WebSocketGateway()
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
 
-  constructor(private roomService: RoomService) {}
+  constructor(private roomService: RoomService, private messageService: MessageService) {}
 
   @SubscribeMessage('JoinRoom')
   async joinRoom(client: Socket, payload) {
@@ -25,9 +26,10 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   }
 
   @SubscribeMessage('Message')
-  handleMsgServer(client: Socket, payload): void {
+  async handleMsgServer(client: Socket, payload){
     console.log('payload', payload)
     client.broadcast.to(payload.room).emit('Message', payload)
+    await this.messageService.addMessage(payload.username, payload.room, payload.message);
   }
 
   afterInit(server: Server) {

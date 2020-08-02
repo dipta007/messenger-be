@@ -24,7 +24,6 @@ export class RoomService {
       const ret = await (await this.roomModel.create({ name: username, users: [user._id] })).save();
       return ret._id;
     }
-    
   }
 
   async getRoom(roomId: string) {
