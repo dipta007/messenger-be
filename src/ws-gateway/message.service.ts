@@ -8,8 +8,7 @@ export class MessageService {
   constructor(@Inject('MESSAGE_MODEL') private messageModel: Model<Room>,
               @Inject('USER_MODEL') private userModel: Model<User>) {}
 
-  async addMessage(username: string, roomId: string, msg: string) {
-    const user = await this.userModel.findOne({ username });
-    return await (await this.messageModel.create({ sender: user._id, message: msg, roomId })).save();
+  async addMessage(userId: string, roomId: string, msg: string) {
+    return await (await this.messageModel.create({ sender: userId, message: msg, roomId })).save();
   }
 }

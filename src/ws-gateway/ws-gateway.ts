@@ -28,8 +28,8 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   @SubscribeMessage('Message')
   async handleMsgServer(client: Socket, payload){
     console.log('payload', payload)
-    client.broadcast.to(payload.room).emit('Message', payload)
-    await this.messageService.addMessage(payload.username, payload.room, payload.message);
+    client.broadcast.to(payload.roomId).emit('Message', payload)
+    await this.messageService.addMessage(payload.sender, payload.roomId, payload.message);
   }
 
   afterInit(server: Server) {

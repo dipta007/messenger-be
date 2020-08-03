@@ -8,22 +8,17 @@ export class RoomService {
   constructor(@Inject('ROOM_MODEL') private roomModel: Model<Room>,
               @Inject('USER_MODEL') private userModel: Model<User>) {}
 
-  async addUserToRoom(roomId: string, username: string) {
+  async addUserToRoom(roomId: string, userId: string) {
     const existingRoom = isValidObjectId(roomId) && await this.roomModel.findById(roomId)
-    const user = await this.userModel.findOne({ username: username });
-
+    const user = await this.userModel.findById(userId);
+    
     let users = [];
-    if (existingRoom) {
-      users = existingRoom.users
-      users = [...users, user._id];
-      users = [...new Set(users)]
+    users = existingRoom.users
+    users = [...users, user._id];
+    users = [...new Set(users)]
 
-      await existingRoom.updateOne({ name: username, users });
-      return existingRoom._id;
-    } else {
-      const ret = await (await this.roomModel.create({ name: username, users: [user._id] })).save();
-      return ret._id;
-    }
+    await existingRoom.updateOne({ users });
+    return existingRoom._id;
   }
 
   async getRoom(roomId: string) {
