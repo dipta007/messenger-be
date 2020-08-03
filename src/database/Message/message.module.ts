@@ -12,4 +12,4 @@ import { DatabaseModule } from '../database.module';
     ...messageProviders,
   ],
 })
-export class MessageModule {}
+export class MessageDbModule {}

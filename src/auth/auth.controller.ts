@@ -14,7 +14,6 @@ export class AuthController {
 
   @Post('signup')
   async signup(@Body() body) {
-    console.log(body)
     return this.authService.signup(body);
   }
 }

@@ -14,25 +14,24 @@ export class AuthService {
     @Inject('USER_MODEL') private userModel: Model<User>
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findUser(username);
+  async validateUser(username: string, pass: string) {
+    let user = await this.usersService.findUser(username);
     if (user && bcrypt.compareSync(pass, user.password)) {
-      const { password, ...result } = user;
-      return result;
+      return { username: user.username, _id: user._id, name: user.name };
     }
     return null;
   }
 
   async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+    const payload = { username: user.username, sub: user._id, name: user.name };
     return {
       access_token: this.jwtService.sign(payload),
+      userId: user._id,
     };
   }
 
   async isUserExist(username) {
     const user = await this.userModel.findOne({ username });
-    console.log(user)
     return user;
   }
 

@@ -13,4 +13,4 @@ import { Room } from './room.interface';
     ...roomProviders,
   ],
 })
-export class RoomModule {}
+export class RoomDbModule {}

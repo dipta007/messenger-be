@@ -5,9 +5,18 @@ import { WsGatewayModule } from './ws-gateway/ws-gateway.module';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { MessageModule } from './message/message.module';
+import { RoomModule } from './room/room.module';
 
 @Module({
-  imports: [WsGatewayModule, DatabaseModule, AuthModule, UserModule],
+  imports: [
+    WsGatewayModule,
+    DatabaseModule,
+    AuthModule,
+    UserModule,
+    MessageModule,
+    RoomModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
