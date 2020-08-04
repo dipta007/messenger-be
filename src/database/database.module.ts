@@ -2,18 +2,15 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Room, RoomSchema } from './Room/room.schema';
-import { Message, MessageSchema } from './Message/message.schema';
+import { Message, MessageSchema } from './models/message.schema';
 import { User, UserSchema } from './User/user.schema';
 @Module({
   imports: [
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => {
-        console.log('db', configService.get<string>('MONGODB_URI'))
-        return ({
-          uri: configService.get<string>('MONGODB_URI'),
-        });
-      },
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+      }),
       inject: [ConfigService],
     }),
     MongooseModule.forFeature([

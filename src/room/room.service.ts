@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Room } from '../database/Room/room.schema';
+import { Room } from '../database/models/room.schema';
 import { Model } from 'mongoose';
 import { UserService } from '../user/user.service';
 import { InjectModel } from '@nestjs/mongoose';
