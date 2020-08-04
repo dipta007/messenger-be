@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Room, RoomSchema } from './Room/room.schema';
+import { Room, RoomSchema } from './models/room.schema';
 import { Message, MessageSchema } from './models/message.schema';
-import { User, UserSchema } from './User/user.schema';
+import { User, UserSchema } from './models/user.schema';
 @Module({
   imports: [
     MongooseModule.forRootAsync({
