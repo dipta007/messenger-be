@@ -1,12 +1,13 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { Room } from '../database/Room/room.interface';
-import { User } from '../database/User/user.interface';
+import { Injectable } from '@nestjs/common';
+import { Room } from '../database/Room/room.schema';
+import { User } from '../database/User/user.schema';
 import { Model, isValidObjectId } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class RoomService {
-  constructor(@Inject('ROOM_MODEL') private roomModel: Model<Room>,
-              @Inject('USER_MODEL') private userModel: Model<User>) {}
+  constructor(@InjectModel(Room.name) private roomModel: Model<Room>,
+              @InjectModel(User.name) private userModel: Model<User>) {}
 
   async addUserToRoom(roomId: string, userId: string) {
     const existingRoom = isValidObjectId(roomId) && await this.roomModel.findById(roomId)

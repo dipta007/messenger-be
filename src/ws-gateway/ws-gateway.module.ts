@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AppGateway } from './ws-gateway';
 import { RoomService } from './room.service';
-import { RoomDbModule } from '../database/Room/room.module';
-import { UserDbModule } from '../database/User/user.module';
-import { MessageDbModule } from '../database/Message/message.module';
 import { MessageService } from './message.service';
+import { DatabaseModule } from '../database/database.module';
 
 @Module({
-  imports: [RoomDbModule, UserDbModule, MessageDbModule],
+  imports: [DatabaseModule],
   controllers: [],
   providers: [AppGateway, RoomService, MessageService]
 })

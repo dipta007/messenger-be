@@ -1,11 +1,12 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { Room } from '../database/Room/room.interface';
+import { Injectable } from '@nestjs/common';
+import { Room } from '../database/Room/room.schema';
 import { Model } from 'mongoose';
 import { UserService } from '../user/user.service';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class RoomService {
-  constructor(@Inject('ROOM_MODEL') private roomModel: Model<Room>,
+  constructor(@InjectModel(Room.name) private roomModel: Model<Room>,
               private userService: UserService) { }
 
   async getConversations(userId: string, offset: number) {
@@ -17,7 +18,7 @@ export class RoomService {
     const promises = members.map(ele => this.userService.findUser(ele));
     const users = await Promise.all(promises);
     const usersId = users.map(u => u._id);
-    const newRoom = await this.roomModel.create({ name, users: [owner, ...usersId]});
+    const newRoom = await this.roomModel.create({ name, users: [owner, ...usersId], emoji: ''});
     const ret = await newRoom.save();
     return ret;
   }

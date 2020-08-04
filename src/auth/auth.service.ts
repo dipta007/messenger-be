@@ -1,17 +1,18 @@
-import { Injectable, Inject, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
-import { User } from '../database/User/user.interface';
+import { User } from '../database/User/user.schema';
 import * as bcrypt from 'bcrypt';
 import { bcryptConstants } from 'src/constants';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
-    @Inject('USER_MODEL') private userModel: Model<User>
+    @InjectModel(User.name) private userModel: Model<User>,
   ) {}
 
   async validateUser(username: string, pass: string) {
@@ -37,11 +38,17 @@ export class AuthService {
 
   async signup(user: any) {
     if (await this.isUserExist(user.username)) {
-      throw new BadRequestException('Email is already in use')
+      throw new BadRequestException('Email is already in use');
     }
-    const hashedPassword = bcrypt.hashSync(user.password, bcryptConstants.saltRounds);
-    delete user.password
-    const createdUser = await this.userModel.create({ ...user, password: hashedPassword });
+    const hashedPassword = bcrypt.hashSync(
+      user.password,
+      bcryptConstants.saltRounds,
+    );
+    delete user.password;
+    const createdUser = await this.userModel.create({
+      ...user,
+      password: hashedPassword,
+    });
     return await createdUser.save();
   }
 }

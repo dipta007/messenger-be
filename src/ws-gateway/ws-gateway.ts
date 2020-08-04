@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import {
   SubscribeMessage,
   WebSocketGateway,
@@ -17,7 +18,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   constructor(private roomService: RoomService, private messageService: MessageService) {}
 
   @SubscribeMessage('JoinRoom')
-  async joinRoom(client: Socket, payload) {
+  async joinRoom(client: Socket, payload: any) {
     console.log('room', payload)
     const { room, id} = payload;
     const roomId = await this.roomService.addUserToRoom(room, id);
