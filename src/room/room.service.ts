@@ -17,7 +17,7 @@ export class RoomService {
   async openConversation(owner: string, members: [string], name: string) {
     const promises = members.map(ele => this.userService.findUser(ele));
     const users = await Promise.all(promises);
-    const usersId = users.map(u => u._id);
+    const usersId = users.map(u => u._id.toString());
     const newRoom = await this.roomModel.create({ name, users: [owner, ...usersId], emoji: ''});
     const ret = await newRoom.save();
     return ret;
